@@ -4,6 +4,15 @@ Pemutar ala Instagram Stories: satu layar per bagian, bar progres, ketuk kanan/k
 
 Next.js 16 (App Router) + TypeScript, tanpa library UI tambahan. Animasi memakai CSS dan satu `requestAnimationFrame` / `IntersectionObserver` bersama, dan otomatis mati bila pengunjung mengaktifkan *reduce motion*.
 
+## Alur
+
+1. **Cover profil.** Lingkaran foto dengan cincin seperti story yang belum dilihat, nama, tagar, angka ringkas (tanggal · jumlah acara · jumlah foto), dan nama tamu. Hanya lingkaran foto yang bisa diketuk.
+2. **Loading.** Cincin berubah jadi putus-putus dan berputar (minimal ±1,3 detik) sambil foto story pertama dimuat.
+3. **Membuka.** Story muncul dari lingkaran yang membesar sampai layar penuh, lalu mulai berputar.
+4. **Tutup (✕ atau Esc).** Kembali ke cover. Cincin menjadi abu-abu, tanda sudah dilihat.
+
+Cover ada di `src/invitation/StoryCover.tsx`; alurnya diatur `StoryPlayer` (state `cover → loading → opening → story`).
+
 ## Menjalankan
 
 ```bash

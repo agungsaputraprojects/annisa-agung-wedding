@@ -35,16 +35,15 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
 
   const slides: Slide[] = [
     {
-      key: "cover", bg: "/img/couple-arm.jpg", duration: 0,
+      key: "opening", bg: "/img/couple-arm.jpg", duration: 7000,
       content: (
         <>
           <Photo src="/img/couple-arm.jpg" alt="Agung dan Icha tersenyum berdampingan" priority />
           <div className={s.body}>
             <A as="span" className={s.sticker}>Undangan Pernikahan</A>
-            <A as="h1" i={1} className={s.big} style={{ marginTop: 16 }}>{W.groom.nickname}<br /><i>&amp; {W.bride.nickname}</i></A>
+            <A as="h2" i={1} className={s.big} style={{ marginTop: 16 }}>{W.groom.nickname}<br /><i>&amp; {W.bride.nickname}</i></A>
             <A as="p" i={2} className={s.sub}>{formatLongDate(ev0.date)}</A>
-            <A as="p" i={3} className={s.sub} style={{ marginTop: 18, fontSize: 13 }}>Kepada Yth. Bapak/Ibu/Saudara/i<br /><b className={s.guest}>{guest || "Tamu Undangan"}</b></A>
-            <A as="p" i={4} className={s.hint}>Ketuk untuk membuka {next}</A>
+            <A as="p" i={3} className={s.hint}>Ketuk kanan untuk lanjut {next}</A>
           </div>
         </>
       ),
@@ -199,6 +198,18 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
         dateShort={new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date))}
         rsvpKey="rsvp"
         giftKey="gift"
+        cover={{
+          avatar: { src: "/img/cream-close.jpg", alt: "Agung dan Icha saling menatap sambil tersenyum" },
+          name: couple,
+          handle: W.hashtag,
+          date: formatLongDate(ev0.date),
+          stats: [
+            [new Intl.DateTimeFormat("id-ID", { day: "numeric", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date)), new Intl.DateTimeFormat("id-ID", { month: "long", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date))],
+            [String(W.events.length), "Acara"],
+            [String(W.gallery.length), "Foto"],
+          ],
+          guest,
+        }}
       />
     </div>
   );
