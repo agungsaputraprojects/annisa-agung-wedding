@@ -111,12 +111,27 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
         </div>
       ),
     },
-    ...W.gallery.filter((g) => ["Langkah", "Saling bersandar", "Tatap"].includes(g.caption)).map((g): Slide => ({
-      key: `photo-${g.caption}`, bg: g.src, duration: 5000,
+    ...W.story.map((ch, i): Slide => ({
+      key: `story-${i + 1}`, bg: ch.photo.src, duration: 10000,
       content: (
         <>
-          <Photo src={g.src} alt={g.alt} />
-          <div className={s.body}><A as="span" className={s.sticker}>Our Stories</A></div>
+          <Photo src={ch.photo.src} alt={ch.photo.alt} />
+          <div className={s.body}>
+            <A className={s.chapter}>
+              <div className={s.chapterHead}>
+                <span className={s.chapterTag}>Our Stories</span>
+                <span className={s.chapterNo} aria-label={`Bab ${i + 1} dari ${W.story.length}`}>
+                  {String(i + 1).padStart(2, "0")}<small> / {String(W.story.length).padStart(2, "0")}</small>
+                </span>
+              </div>
+              <div className={s.chapterSteps} aria-hidden="true">
+                {W.story.map((_, k) => <i key={k} className={k <= i ? s.stepOn : undefined} />)}
+              </div>
+              <p className={s.chapterWhen}><Placeholder text={ch.when} /></p>
+              <h2 className={s.chapterTitle}>{ch.title}</h2>
+              <p className={s.chapterText}><Placeholder text={ch.text} /></p>
+            </A>
+          </div>
         </>
       ),
     })),

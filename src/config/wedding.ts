@@ -29,6 +29,15 @@ export type GiftAccount = { bank: string; number: string; holder: string };
 
 export type GalleryItem = Photo & { caption: string };
 
+export type StoryChapter = {
+  title: string;
+  /** shown above the title, e.g. "2019 · Bogor" */
+  when: string;
+  /** keep it short: about 2–4 sentences (max ±320 characters) so the card fits without scrolling */
+  text: string;
+  photo: Photo;
+};
+
 export type WeddingConfig = {
   hashtag: string;
   timezoneOffset: string;
@@ -43,6 +52,8 @@ export type WeddingConfig = {
   countdownPhoto: Photo;
   interlude: Photo & { arabic: string; text: string; source: string };
   closingPhotos: [Photo, Photo];
+  /** "Our Stories": three chapters shown as cards over a photo */
+  story: StoryChapter[];
   gallery: GalleryItem[];
 };
 
@@ -118,6 +129,27 @@ export const wedding: WeddingConfig = {
   closingPhotos: [
     { src: "/img/groom-back.jpg", alt: "Agung berdiri membelakangi kamera" },
     { src: "/img/bride-back.jpg", alt: "Icha berdiri membelakangi kamera memegang buket lili" },
+  ],
+
+  story: [
+    {
+      title: "Pertemuan",
+      when: "[Tahun] · [Tempat]",
+      text: "[Ceritakan di mana dan bagaimana kalian pertama kali bertemu. Cukup 2–4 kalimat.]",
+      photo: { src: "/img/back2back.jpg", alt: "Agung dan Icha berdiri saling membelakangi" },
+    },
+    {
+      title: "Perkenalan",
+      when: "[Tahun]",
+      text: "[Ceritakan bagaimana kalian mulai saling mengenal dan menjadi dekat.]",
+      photo: { src: "/img/cream-close.jpg", alt: "Agung dan Icha saling menatap sambil tersenyum" },
+    },
+    {
+      title: "Memutuskan Menikah",
+      when: "[Tanggal lamaran]",
+      text: "[Ceritakan momen kalian memutuskan untuk melangkah ke pernikahan, misalnya lamaran atau khitbah.]",
+      photo: { src: "/img/cream-hands.jpg", alt: "Agung dan Icha bergandengan tangan" },
+    },
   ],
 
   gallery: [

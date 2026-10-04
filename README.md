@@ -27,6 +27,8 @@ Saat deploy (mis. Vercel), set `NEXT_PUBLIC_SITE_URL` ke domain undangan supaya 
 ## Mengubah isi
 
 Semua data ada di **`src/config/wedding.ts`**: nama, orang tua, jadwal, lokasi, nomor WhatsApp RSVP, rekening, foto.
+Bagian **Our Stories** (3 bab: Pertemuan, Perkenalan, Memutuskan Menikah) ada di `story` dalam file yang sama: isi `when` (mis. "2019 · Bogor") dan `text` (±2–4 kalimat, maks. ±320 karakter agar kartu muat tanpa digulir; teks lebih panjang dipotong dengan "…"). Foto tiap bab bisa diganti di `photo`.
+
 Teks dalam `[kurung siku]` dianggap placeholder dan tampil ditandai di halaman.
 
 Nama tamu diambil dari link: `https://domain-anda/?to=Bapak+Budi+dan+Keluarga`
