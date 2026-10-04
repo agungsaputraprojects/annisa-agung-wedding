@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { ThemeBody } from "@/components/motion/ThemeBody";
@@ -8,7 +9,6 @@ import { wedding as W } from "@/config/wedding";
 import { formatLongDate, formatTime, googleCalendarUrl, toDate } from "@/lib/date";
 import { StoryCountdown, StoryGallery } from "./StoryBits";
 import { ReplayButton, StoryPlayer, type Slide } from "./StoryPlayer";
-import { fontVars } from "./fonts";
 import s from "./stories.module.css";
 
 /** Element that enters in sequence when its slide becomes active. */
@@ -23,7 +23,11 @@ const Photo = ({ src, alt, priority }: { src: string; alt: string; priority?: bo
   </>
 );
 
-/** Model 02 · Stories — one screen per part of the invitation, tap to move on. */
+/**
+ * Model 02 · Stories — one screen per part of the invitation, tap to move on.
+ * A Client Component on purpose: the slides live inside the (client) StoryPlayer, and keeping them
+ * client-side avoids React DevTools' "children should not have changed" error with Server Component children.
+ */
 export function StoriesInvitation({ guest }: { guest?: string }) {
   const ev0 = W.events[0];
   const couple = `${W.groom.nickname} & ${W.bride.nickname}`;
@@ -112,7 +116,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       content: (
         <>
           <Photo src={g.src} alt={g.alt} />
-          <div className={s.body}><A as="span" className={s.sticker}>{g.caption}</A></div>
+          <div className={s.body}><A as="span" className={s.sticker}>Our Stories</A></div>
         </>
       ),
     })),
@@ -189,7 +193,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
   ];
 
   return (
-    <div className={`${fontVars} ${s.root}`}>
+    <div className={s.root}>
       <ThemeBody background="#111012" scheme="dark" />
       <StoryPlayer
         slides={slides}
