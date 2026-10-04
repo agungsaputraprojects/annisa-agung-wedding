@@ -8,7 +8,8 @@
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* tap-only invitation: the page itself never scrolls */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 body { margin: 0; background: #111012; -webkit-font-smoothing: antialiased; overflow-x: clip; }
 img { display: block; max-width: 100%; }
 h1, h2, h3, p { margin: 0; }

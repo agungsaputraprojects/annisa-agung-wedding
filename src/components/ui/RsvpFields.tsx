@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { useRsvp } from "@/hooks/useRsvp";
 
 export type RsvpClasses = Partial<Record<
-  "form" | "field" | "label" | "input" | "choices" | "choice" | "preview" | "error" | "send", string
+  "form" | "row" | "field" | "label" | "input" | "choices" | "choice" | "preview" | "error" | "send", string
 >>;
 
 type Props = {
@@ -25,6 +25,8 @@ export function RsvpFields({ idPrefix: p, phone, couple, defaultName, maxGuests 
         <label className={c.label} htmlFor={`${p}name`}>Nama</label>
         <input className={c.input} id={`${p}name`} type="text" autoComplete="name" placeholder="Nama Anda" value={r.name} onChange={(e) => r.setName(e.target.value)} />
       </div>
+      {/* attendance + guest count; with `classes.row` they can sit side by side */}
+      <div className={c.row} style={c.row ? undefined : { display: "contents" }}>
       <fieldset className={c.field}>
         <legend className={c.label}>Kehadiran</legend>
         <div className={c.choices}>
@@ -44,6 +46,7 @@ export function RsvpFields({ idPrefix: p, phone, couple, defaultName, maxGuests 
           </select>
         </div>
       )}
+      </div>
       <div className={c.field}>
         <label className={c.label} htmlFor={`${p}msg`}>Ucapan &amp; doa</label>
         <textarea className={c.input} id={`${p}msg`} rows={3} placeholder="Barakallahu lakuma…" value={r.message} onChange={(e) => r.setMessage(e.target.value)} />

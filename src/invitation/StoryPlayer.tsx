@@ -35,7 +35,7 @@ function preloadSlides(root: HTMLElement | null, count: number, cap: number) {
   ]);
 }
 
-/** Instagram-style story player: progress bars, auto-advance, tap thirds, swipe, hold to pause, arrow keys, wheel. */
+/** Instagram-style story player: progress bars, auto-advance, tap left/right, hold to pause, arrow keys. Nothing scrolls; it is tap-only. */
 export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftKey, cover }: Props) {
   const [phase, setPhase] = useState<Phase>("cover");
   const [seen, setSeen] = useState(false);
@@ -111,7 +111,18 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
     return () => cancelAnimationFrame(raf);
   }, [cur, paused, hold, reduce, slides, go, phase]);
 
-  /* keyboard + wheel */
+  /* tap-only: block every scroll/wheel/drag gesture on the page (a long message inside the textarea may still scroll) */
+  useEffect(() => {
+    const block = (e: Event) => {
+      if ((e.target as Element | null)?.closest?.("textarea")) return;
+      e.preventDefault();
+    };
+    window.addEventListener("wheel", block, { passive: false });
+    window.addEventListener("touchmove", block, { passive: false });
+    return () => { window.removeEventListener("wheel", block); window.removeEventListener("touchmove", block); };
+  }, []);
+
+  /* keyboard */
   useEffect(() => {
     if (phase !== "story") return;
     const key = (e: KeyboardEvent) => {
@@ -120,21 +131,12 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
       if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); go(cur + 1); }
       if (e.key === "ArrowLeft") go(cur - 1);
     };
-    let lock = 0;
-    const wheel = (e: WheelEvent) => {
-      if ((e.target as Element).closest?.(`.${s.scroll}`)) return;
-      const now = performance.now();
-      if (now < lock || Math.abs(e.deltaY) < 20) return;
-      lock = now + 700;
-      go(cur + (e.deltaY > 0 ? 1 : -1));
-    };
     window.addEventListener("keydown", key);
-    window.addEventListener("wheel", wheel, { passive: true });
-    return () => { window.removeEventListener("keydown", key); window.removeEventListener("wheel", wheel); };
+    return () => window.removeEventListener("keydown", key);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cur, go, phase]);
 
-  /* tap / swipe / hold */
+  /* tap / hold (no swipe: navigation is by tapping only) */
   const down = useRef<{ x: number; y: number } | null>(null);
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const held = useRef(false);
@@ -152,8 +154,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
     if (!d) return;
     if (held.current) { setHold(false); return; }
     const dx = e.clientX - d.x, dy = e.clientY - d.y;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
-    else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
       const r = stage.current!.getBoundingClientRect();
       go(e.clientX - r.left < r.width * 0.3 ? cur - 1 : cur + 1);
     }
@@ -230,7 +231,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6l6 6-6 6" /></svg>
         </button>
       </div>
-      <p className={s.keys}>Ketuk sisi kanan/kiri, geser, atau pakai tombol panah · tahan untuk menjeda</p>
+      <p className={s.keys}>Ketuk sisi kanan/kiri atau tombol panah · tahan untuk menjeda</p>
     </StoryCtx.Provider>
   );
 }

@@ -9,7 +9,8 @@ Next.js 16 (App Router) + TypeScript, tanpa library UI tambahan. Animasi memakai
 1. **Cover profil.** Lingkaran foto dengan cincin seperti story yang belum dilihat, nama, tagar, angka ringkas (tanggal · jumlah acara · jumlah foto), dan nama tamu. Hanya lingkaran foto yang bisa diketuk.
 2. **Loading.** Cincin berubah jadi putus-putus dan berputar (minimal ±1,3 detik) sambil foto story pertama dimuat.
 3. **Membuka.** Story muncul dari lingkaran yang membesar sampai layar penuh, lalu mulai berputar.
-4. **Tutup (✕ atau Esc).** Kembali ke cover. Cincin menjadi abu-abu, tanda sudah dilihat.
+4. **Hanya ketuk.** Tidak ada scroll, roda mouse, atau geser. Ketuk sisi kanan untuk lanjut, sisi kiri untuk kembali, tahan untuk jeda; di desktop juga tombol panah dan tombol keyboard ← →. Semua layar (termasuk Galeri dan RSVP) dirancang muat tanpa digulir, sampai layar 360×640.
+5. **Tutup (✕ atau Esc).** Kembali ke cover. Cincin menjadi abu-abu, tanda sudah dilihat.
 
 Cover ada di `src/invitation/StoryCover.tsx`; alurnya diatur `StoryPlayer` (state `cover → loading → opening → story`).
 

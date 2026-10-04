@@ -23,7 +23,7 @@ const Photo = ({ src, alt, priority }: { src: string; alt: string; priority?: bo
   </>
 );
 
-/** Model 02 · Stories — one screen per part of the invitation, tap or swipe to move on. */
+/** Model 02 · Stories — one screen per part of the invitation, tap to move on. */
 export function StoriesInvitation({ guest }: { guest?: string }) {
   const ev0 = W.events[0];
   const couple = `${W.groom.nickname} & ${W.bride.nickname}`;
@@ -52,9 +52,9 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       key: "salam", bg: "/img/back2back.jpg", duration: 12000, tone: "dark",
       content: (
         <div className={`${s.body} ${s.mid}`} style={{ textAlign: "center" }}>
-          <A as="p" className={s.arab} lang="ar" style={{ fontSize: 34 }}>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</A>
+          <A as="p" className={`${s.arab} ${s.basm}`} lang="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</A>
           <A as="p" i={1} className={s.cap} style={{ marginTop: 10 }}>Assalamu’alaikum Wr. Wb.</A>
-          <A as="p" i={2} className={s.arab} lang="ar" style={{ fontSize: 21, marginTop: 26, color: "var(--txt-2)" }}>{W.verse.arabic}</A>
+          <A as="p" i={2} className={`${s.arab} ${s.verseAr}`} lang="ar">{W.verse.arabic}</A>
           <A as="p" i={3} className={s.verseTr}>“{W.verse.translation}”</A>
           <A as="p" i={4} className={s.cap} style={{ marginTop: 12 }}>{W.verse.source}</A>
         </div>
@@ -119,7 +119,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
     {
       key: "gallery", bg: "/img/cream-seated.jpg", duration: 0, tone: "dark",
       content: (
-        <div className={s.scroll}>
+        <div className={s.panel}>
           <A as="span" className={s.cap}>Galeri</A>
           <A as="h2" i={1} className={s.h} style={{ marginTop: 10 }}>Semua <i>momen</i></A>
           <StoryGallery items={W.gallery} />
@@ -142,13 +142,13 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
     {
       key: "rsvp", bg: "/img/cream-hands.jpg", duration: 0, tone: "paper",
       content: (
-        <div className={s.scroll}>
+        <div className={s.panel}>
           <A as="span" className={s.cap}>Konfirmasi kehadiran</A>
           <A as="h2" i={1} className={s.h} style={{ marginTop: 10 }}>Akan <i>hadir?</i></A>
-          <A as="p" i={2} className={s.sub}>Pesan dikirim lewat WhatsApp ke keluarga mempelai. Anda bisa melihatnya dulu sebelum mengirim.</A>
+          <A as="p" i={2} className={`${s.sub} ${s.subSm}`}>Dikirim lewat WhatsApp ke keluarga mempelai; isi pesannya tampil dulu.</A>
           <A i={3}>
             <RsvpFields idPrefix="story-" phone={W.rsvpWhatsapp} couple={couple} defaultName={guest}
-              classes={{ form: s.fForm, field: s.fField, label: s.fLabel, input: s.fInput, choices: s.fChoices, choice: s.fChoice, preview: s.fPreview, error: s.fErr, send: s.fSend }} />
+              classes={{ form: s.fForm, row: s.fRow, field: s.fField, label: s.fLabel, input: s.fInput, choices: s.fChoices, choice: s.fChoice, preview: s.fPreview, error: s.fErr, send: s.fSend }} />
           </A>
         </div>
       ),
