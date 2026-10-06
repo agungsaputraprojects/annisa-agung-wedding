@@ -40,6 +40,14 @@
 .ic { width: 36px; height: 36px; border-radius: 50%; border: 0; background: transparent; color: #fff; display: grid; place-items: center; cursor: pointer; }
 .ic svg { width: 18px; height: 18px; }
 
+.vol { display: flex; align-items: center; border-radius: 20px; transition: background 0.25s; }
+.vol[data-open] { background: rgba(0,0,0,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.volSlider { width: 0; overflow: hidden; transition: width 0.25s ease, opacity 0.2s; opacity: 0; display: flex; align-items: center; }
+.vol[data-open] .volSlider { width: 80px; opacity: 1; }
+.volTrack { width: 100%; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.25); position: relative; cursor: pointer; touch-action: none; margin-right: 10px; }
+.volFill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; background: #fff; pointer-events: none; }
+.volThumb { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; background: #fff; transform: translate(-50%, -50%); pointer-events: none; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+
 .slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; transform: scale(1.04); transition: opacity 0.5s var(--ease), transform 0.7s var(--ease), visibility 0s 0.7s; }
 .slide.on { visibility: visible; opacity: 1; transform: none; transition: opacity 0.5s var(--ease), transform 0.7s var(--ease); }
 .slide.back { transform: scale(0.96); }
@@ -92,7 +100,16 @@
 .count div { text-align: center; padding: 12px 2px; }
 .count b { display: block; font: 400 34px/1 var(--serif); font-variant-numeric: tabular-nums; }
 .count .cap { display: block; margin-top: 6px; font-size: 9.5px; }
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 16px; border-radius: 18px; overflow: hidden; }
+.tabs { display: flex; gap: 6px; margin-top: 14px; }
+.tab, .tabOn {
+  padding: 7px 16px; border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: transparent; color: var(--txt-2); font: 600 12.5px/1 var(--sans); cursor: pointer;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.tabOn { background: rgba(255, 255, 255, 0.18); color: #fff; border-color: rgba(255, 255, 255, 0.4); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 12px; border-radius: 18px; overflow: hidden;
+  animation: gridIn 0.4s cubic-bezier(0.33, 1, 0.68, 1); }
+@keyframes gridIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .grid button { position: relative; aspect-ratio: 3 / 4; border: 0; padding: 0; background: #222; cursor: zoom-in; overflow: hidden; }
 .acct { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .acct + .acct { margin-top: 10px; }
@@ -101,6 +118,8 @@
 .acct small { color: rgba(29, 26, 23, 0.6); }
 .duo { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
 .duo > div { position: relative; }
+.credit { margin-top: 14px; font-size: 11.5px; color: var(--txt-3); }
+.credit a { color: var(--txt-2); text-decoration: none; }
 
 
 .reply { position: absolute; z-index: 20; inset: auto 0 0; padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; gap: 10px; align-items: center; background: linear-gradient(0deg, rgba(0, 0, 0, 0.45), transparent); }
@@ -147,7 +166,19 @@
 .root .chapterTitle { margin-top: 6px; font: italic 400 clamp(34px, 10vw, 46px)/1 var(--serif); letter-spacing: -0.01em; font-variation-settings: "SOFT" 100, "opsz" 144; }
 .chapterText {
   margin-top: 10px; font: 300 16px/1.5 var(--serif); color: rgba(255, 255, 255, 0.9);
-  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden;
+  max-height: 120px; overflow: hidden; position: relative;
+  transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+.chapterOpen {
+  max-height: 50vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: none; mask-image: none;
+}
+.chapterPara { margin-top: 12px; }
+.chapterMore {
+  margin-top: 10px; padding: 6px 0; border: 0; background: none;
+  color: #f3e4c8; font: 600 13px/1 var(--sans); cursor: pointer; letter-spacing: 0.02em;
 }
 .chapter .ph { background: rgba(255, 255, 255, 0.14); }
 
@@ -232,7 +263,7 @@
   .h { font-size: clamp(32px, 9.5vw, 44px); }
   .mid { padding-top: 78px; }
   .chapter { padding: 14px 16px 16px; }
-  .chapterText { font-size: 15px; -webkit-line-clamp: 5; }
+  .chapterText { font-size: 15px; max-height: 100px; }
   .chapterWhen { margin-top: 12px; }
   .basm { font-size: 26px; }
   .verseAr { font-size: 16.5px; margin-top: 12px; line-height: 1.75; }

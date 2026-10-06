@@ -47,9 +47,16 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
   const [back, setBack] = useState(false);
   const [paused, setPaused] = useState(false);
   const [hold, setHold] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [volume, setVolume] = useState(80);
+  const [volOpen, setVolOpen] = useState(false);
   const fills = useRef<(HTMLElement | null)[]>([]);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const volRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const stage = useRef<HTMLElement>(null);
+
+  const AUDIO_START = 52;
 
   const curRef = useRef(0);
   const go = useCallback((n: number) => {
@@ -87,7 +94,55 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
     setSeen(true);
     setPaused(false);
     setPhase("cover");
+    audioRef.current?.pause();
     setTimeout(() => avatarRef.current?.focus(), 50);
+  };
+
+  /* background music: play from 0:59 when story opens, loop back to 0:59 on end */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (phase === "story") {
+      audio.currentTime = AUDIO_START;
+      audio.play().catch(() => {});
+    } else if (phase === "cover") {
+      audio.pause();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onEnded = () => { audio.currentTime = AUDIO_START; audio.play().catch(() => {}); };
+    audio.addEventListener("ended", onEnded);
+    return () => audio.removeEventListener("ended", onEnded);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) { audioRef.current.volume = volume / 100; audioRef.current.muted = muted; }
+  }, [volume, muted]);
+
+  useEffect(() => {
+    if (!volOpen) return;
+    const onClick = (e: MouseEvent) => { if (volRef.current && !volRef.current.contains(e.target as Node)) setVolOpen(false); };
+    document.addEventListener("pointerdown", onClick, true);
+    return () => document.removeEventListener("pointerdown", onClick, true);
+  }, [volOpen]);
+
+  const onVolDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const track = e.currentTarget;
+    const update = (clientX: number) => {
+      const rect = track.getBoundingClientRect();
+      const pct = Math.round(Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100)));
+      setVolume(pct);
+      setMuted(pct === 0);
+    };
+    update(e.clientX);
+    const onMove = (ev: PointerEvent) => update(ev.clientX);
+    const onUp = () => { document.removeEventListener("pointermove", onMove); document.removeEventListener("pointerup", onUp); };
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
   };
 
   /* progress + auto-advance */
@@ -194,6 +249,19 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
               <div className={s.avatar}><span>{monogram}</span></div>
               <div><b>{title}</b><small>{dateShort}</small></div>
               <div className={s.sp} />
+              <div className={s.vol} ref={volRef} data-no-tap="" data-open={volOpen ? "" : undefined}>
+                <button className={s.ic} onClick={() => setVolOpen((v) => !v)} aria-label="Volume musik">
+                  {muted || volume === 0
+                    ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+                    : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.54 8.46a5 5 0 010 7.07" />{volume > 50 && <path d="M19.07 4.93a10 10 0 010 14.14" />}</svg>}
+                </button>
+                <div className={s.volSlider}>
+                  <div className={s.volTrack} onPointerDown={onVolDrag}>
+                    <div className={s.volFill} style={{ width: `${volume}%` }} />
+                    <div className={s.volThumb} style={{ left: `${volume}%` }} />
+                  </div>
+                </div>
+              </div>
               <button className={s.ic} onClick={() => setPaused((p) => !p)} aria-label={paused ? "Lanjutkan" : "Jeda"}>
                 {paused
                   ? <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z" /></svg>
@@ -233,6 +301,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
         </button>
       </div>
       <p className={s.keys}>Ketuk sisi kanan/kiri atau tombol panah · tahan untuk menjeda</p>
+      <audio ref={audioRef} src="/audio/bg-music.mp4" preload="auto" />
     </StoryCtx.Provider>
   );
 }

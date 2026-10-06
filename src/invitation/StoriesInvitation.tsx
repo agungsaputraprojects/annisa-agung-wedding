@@ -6,7 +6,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { Placeholder } from "@/components/ui/Placeholder";
 import { wedding as W } from "@/config/wedding";
 import { formatLongDate, formatTime, googleCalendarUrl, toDate } from "@/lib/date";
-import { StoryCountdown, StoryGallery } from "./StoryBits";
+import { ChapterCard, StoryCountdown, StoryGallery } from "./StoryBits";
 import { Wishes } from "./Wishes";
 import { ReplayButton, StoryPlayer, type Slide } from "./StoryPlayer";
 import s from "./stories.module.css";
@@ -135,20 +135,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
           <Photo src={ch.photo.src} alt={ch.photo.alt} position={ch.photo.position}
             fill={ch.fit === "top" ? ch.fill : undefined} warm={ch.fit === "top"} />
           <div className={s.body}>
-            <A className={s.chapter}>
-              <div className={s.chapterHead}>
-                <span className={s.chapterTag}>Our Stories</span>
-                <span className={s.chapterNo} aria-label={`Bab ${i + 1} dari ${W.story.length}`}>
-                  {String(i + 1).padStart(2, "0")}<small> / {String(W.story.length).padStart(2, "0")}</small>
-                </span>
-              </div>
-              <div className={s.chapterSteps} aria-hidden="true">
-                {W.story.map((_, k) => <i key={k} className={k <= i ? s.stepOn : undefined} />)}
-              </div>
-              <p className={s.chapterWhen}><Placeholder text={ch.when} /></p>
-              <h2 className={s.chapterTitle}>{ch.title}</h2>
-              <p className={s.chapterText}><Placeholder text={ch.text} /></p>
-            </A>
+            <A><ChapterCard ch={ch} index={i} total={W.story.length} /></A>
           </div>
         </>
       ),
@@ -159,7 +146,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
         <div className={s.panel}>
           <A as="span" className={s.cap}>Galeri</A>
           <A as="h2" i={1} className={s.h} style={{ marginTop: 10 }}>Semua <i>momen</i></A>
-          <StoryGallery items={W.gallery} />
+          <StoryGallery sections={W.gallery} />
         </div>
       ),
     },
@@ -201,14 +188,16 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       content: (
         <>
           <div className={s.duo}>
-            {W.closingPhotos.map((p) => <div key={p.src}><Image src={p.src} alt={p.alt} fill sizes="230px" style={{ objectFit: "cover" }} /></div>)}
+            <div><Image src={W.closingPhotos[0].src} alt={W.closingPhotos[0].alt} fill sizes="230px" style={{ objectFit: "cover", objectPosition: W.closingPhotos[0].position }} /></div>
+            <div style={{ background: "#d0c4b4" }}><Image src={W.closingPhotos[1].src} alt={W.closingPhotos[1].alt} fill sizes="230px" style={{ objectFit: "cover", objectPosition: W.closingPhotos[1].position, top: -25 }} /></div>
           </div>
           <div className={s.shade} />
           <div className={s.body} style={{ textAlign: "center" }}>
             <A as="h2" className={s.big}>Terima <i>kasih</i></A>
             <A as="p" i={1} className={s.sub}>Atas doa dan kehadiran Bapak/Ibu/Saudara/i.</A>
-            <A as="p" i={2} className={s.cap} style={{ marginTop: 12 }}>Wassalamu’alaikum Wr. Wb. · {W.hashtag}</A>
+            <A as="p" i={2} className={s.cap} style={{ marginTop: 12, textTransform: "none" }}>{W.hashtag}</A>
             <A i={3} style={{ marginTop: 18 }}><ReplayButton className={s.pill} /></A>
+            <A as="p" i={4} className={s.credit}>created by <a href="https://www.instagram.com/agunggsputra_" target="_blank" rel="noopener noreferrer">Agung Saputra</a></A>
           </div>
         </>
       ),
@@ -233,7 +222,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
           stats: [
             [new Intl.DateTimeFormat("id-ID", { day: "numeric", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date)), new Intl.DateTimeFormat("id-ID", { month: "long", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date))],
             [String(W.events.length), "Acara"],
-            [String(W.gallery.length), "Foto"],
+            [String(W.gallery.reduce((n, sec) => n + sec.items.length, 0)), "Foto"],
           ],
           guest,
         }}
