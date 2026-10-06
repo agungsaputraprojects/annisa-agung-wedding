@@ -49,6 +49,9 @@
 .photo { object-fit: cover; }
 .slide.on .kb { animation: kb 9s linear both; }
 @keyframes kb { from { transform: scale(1.14) translateY(2%); } to { transform: scale(1.02); } }
+/* gentler zoom for photos shown whole-width (fill mode), so the subject is never cropped */
+.slide.on .kbSoft { animation: kbSoft 9s linear both; transform-origin: 50% 40%; }
+@keyframes kbSoft { from { transform: scale(1.04); } to { transform: scale(1); } }
 .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 25%, transparent 45%, rgba(0, 0, 0, 0.82) 100%); }
 /* warm variant for cream photos: deep brown instead of grey-black */
 .shadeWarm { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(43, 28, 16, 0.3) 0%, transparent 24%, transparent 42%, rgba(43, 28, 16, 0.62) 70%, rgba(33, 21, 12, 0.9) 100%); }
@@ -99,25 +102,6 @@
 .duo { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
 .duo > div { position: relative; }
 
-/* rsvp */
-.fForm { display: grid; gap: 10px; margin-top: 12px; }
-.fRow .fLabel { letter-spacing: 0.08em; }
-.fRow { display: grid; grid-template-columns: minmax(0, 1fr) 80px; gap: 10px; align-items: end; }
-.subSm { font-size: 13px; margin-top: 6px; }
-.fField { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
-.fLabel { white-space: nowrap; font: 700 10.5px/1.2 var(--sans); letter-spacing: 0.18em; text-transform: uppercase; color: rgba(29, 26, 23, 0.55); padding: 0; }
-.fInput { width: 100%; font: 500 16px/1.4 var(--sans); color: var(--paper-ink); background: #fff; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 14px; padding: 10px 14px; outline: none; }
-.fInput:focus { border-color: var(--paper-ink); }
-textarea.fInput { resize: none; height: 62px; }
-.fChoices { display: flex; gap: 6px; }
-.fChoice input { position: absolute; opacity: 0; pointer-events: none; }
-.fChoice span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; white-space: nowrap; font-size: 12.5px !important; border-radius: 999px; background: #fff; border: 1px solid rgba(0, 0, 0, 0.08); cursor: pointer; font-size: 14px; font-weight: 600; }
-.fChoice input:checked + span { background: var(--paper-ink); color: #fff; border-color: var(--paper-ink); }
-.fChoice input:focus-visible + span { outline: 2px solid var(--paper-ink); outline-offset: 2px; }
-.fPreview { background: rgba(255, 255, 255, 0.6); border: 1px dashed rgba(0, 0, 0, 0.15); border-radius: 14px; padding: 9px 12px; font-size: 12px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; color: rgba(29, 26, 23, 0.75); overflow: hidden; max-height: calc(4.2 * 1.45em + 18px); -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
-.fErr { color: #9b2222; font-size: 12.5px; min-height: 1.1em; margin: -4px 0; }
-.fSend { display: flex; justify-content: center; align-items: center; min-height: 50px; border-radius: 999px; background: var(--paper-ink); color: #fff; font: 700 14px var(--sans); text-decoration: none; }
-.fSend[aria-disabled="true"] { opacity: 0.45; }
 
 .reply { position: absolute; z-index: 20; inset: auto 0 0; padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; gap: 10px; align-items: center; background: linear-gradient(0deg, rgba(0, 0, 0, 0.45), transparent); }
 .box { flex: 1; min-height: 44px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.55); background: transparent; color: #fff; text-align: left; padding: 0 18px; font: 500 14px var(--sans); cursor: pointer; }
@@ -137,8 +121,13 @@ textarea.fInput { resize: none; height: 62px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .slide, .slide.on, .a, .slide.on .a { transition: opacity 0.2s !important; transform: none !important; }
-  .slide.on .kb, .hint svg { animation: none; }
+  .slide.on .kb, .slide.on .kbSoft, .hint svg { animation: none; }
 }
+
+/* photo shown whole-width from the top, the rest painted in the photo's own colour */
+.fillStage { position: absolute; inset: 0; overflow: hidden; }
+.fillBox { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 2 / 3; overflow: hidden; }
+.fillBox::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 24%; background: linear-gradient(180deg, transparent, var(--fill)); }
 
 /* ---------- Our Stories chapter card ---------- */
 .chapter {

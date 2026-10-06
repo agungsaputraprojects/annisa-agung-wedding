@@ -114,7 +114,8 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
   /* tap-only: block every scroll/wheel/drag gesture on the page (a long message inside the textarea may still scroll) */
   useEffect(() => {
     const block = (e: Event) => {
-      if ((e.target as Element | null)?.closest?.("textarea")) return;
+      // the wishes feed (data-scroll) and text boxes may scroll inside themselves
+      if ((e.target as Element | null)?.closest?.("textarea,[data-scroll]")) return;
       e.preventDefault();
     };
     window.addEventListener("wheel", block, { passive: false });
@@ -219,7 +220,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
 
           {slide.key !== rsvpKey && (
             <div className={`${s.reply} ${light ? s.replyLight : ""}`}>
-              <button className={s.box} onClick={() => goTo(rsvpKey)}>Kirim ucapan…</button>
+              <button className={s.box} onClick={() => { goTo(rsvpKey); setTimeout(() => window.dispatchEvent(new Event("wishes:compose")), 450); }}>Kirim ucapan…</button>
               <button className={s.ic} onClick={() => goTo(giftKey)} aria-label="Amplop digital">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1zm0 0c2-4 6-4 6-1s-6 1-6 1z" /></svg>
               </button>

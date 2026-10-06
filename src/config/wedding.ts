@@ -32,6 +32,12 @@ export type GalleryItem = Photo & { caption: string };
 
 export type StoryChapter = {
   title: string;
+  /**
+   * Optional framing for this chapter only: "top" shows the photo from the top in a shorter frame
+   * (so faces stay above the card) and fills the rest with `fill`, the photo's own floor colour.
+   */
+  fit?: "cover" | "top";
+  fill?: string;
   /** shown above the title, e.g. "2019 · Bogor" */
   when: string;
   /** keep it short: about 2–4 sentences (max ±320 characters) so the card fits without scrolling */
@@ -51,7 +57,6 @@ export type WeddingConfig = {
   groom: Person;
   bride: Person;
   events: WeddingEvent[];
-  rsvpWhatsapp: string;
   gifts: GiftAccount[];
   dressCode: { note: string; colors: string[] };
   verse: { arabic: string; translation: string; source: string };
@@ -100,19 +105,17 @@ export const wedding: WeddingConfig = {
       name: "Resepsi",
       date: "2026-10-17",
       start: "11:00",
-      end: "14:00",
+      end: "13:00",
       venue: "Rumah Kayu Ilir-Ilir",
       address: "Depok, Jawa Barat",
       mapsUrl: "https://maps.app.goo.gl/CLgZV6FXSgtbdSPGA",
     },
   ],
 
-  /** Nomor tujuan RSVP, format internasional tanpa + (contoh 6281234567890) */
-  rsvpWhatsapp: "6281234567890",
 
   gifts: [
-    { bank: "BCA", number: "[0000000000]", holder: "Agung Saputra" },
-    { bank: "[Bank]", number: "[0000000000]", holder: "Annisa Aprilia Nilam Sari" },
+    { bank: "BCA", number: "2280150480", holder: "Agung Saputra" },
+    { bank: "BRI", number: "034001118142502", holder: "Annisa Aprilia Nilam Sari" },
   ],
 
   dressCode: {
@@ -136,9 +139,10 @@ export const wedding: WeddingConfig = {
     text: "Dan Kami menciptakan kamu berpasang-pasangan.",
     source: "QS. An-Naba : 8",
   },
+  /** left, right */
   closingPhotos: [
+    { src: "/img/bride-back.jpg", alt: "Annisa berdiri membelakangi kamera memegang buket lili" },
     { src: "/img/groom-back.jpg", alt: "Agung berdiri membelakangi kamera" },
-    { src: "/img/bride-back.jpg", alt: "Icha berdiri membelakangi kamera memegang buket lili" },
   ],
 
   story: [
@@ -146,7 +150,7 @@ export const wedding: WeddingConfig = {
       title: "Pertemuan",
       when: "[Tahun] · [Tempat]",
       text: "[Ceritakan di mana dan bagaimana kalian pertama kali bertemu. Cukup 2–4 kalimat.]",
-      photo: { src: "/img/back2back.jpg", alt: "Agung dan Icha berdiri saling membelakangi" },
+      photo: { src: "/img/back2back.jpg", alt: "Agung dan Icha berdiri saling membelakangi", position: "75% 50%" },
     },
     {
       title: "Perkenalan",
@@ -159,6 +163,8 @@ export const wedding: WeddingConfig = {
       when: "[Tanggal lamaran]",
       text: "[Ceritakan momen kalian memutuskan untuk melangkah ke pernikahan, misalnya lamaran atau khitbah.]",
       photo: { src: "/img/cream-hands.jpg", alt: "Agung dan Icha bergandengan tangan" },
+      fit: "top",
+      fill: "#D4C1B4",
     },
   ],
 

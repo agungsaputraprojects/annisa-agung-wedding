@@ -49,7 +49,7 @@ export function Lightbox({ items, index, onChange, onClose }: Props) {
       }}
     >
       <div className={styles.bar}>
-        <span className="eyebrow">
+        <span className={styles.srOnly}>
           {pad2(index + 1)} / {pad2(items.length)} · {item.caption}
         </span>
         <button ref={close} className={styles.icon} onClick={onClose} aria-label="Tutup">
