@@ -50,6 +50,8 @@
 .slide.on .kb { animation: kb 9s linear both; }
 @keyframes kb { from { transform: scale(1.14) translateY(2%); } to { transform: scale(1.02); } }
 .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 25%, transparent 45%, rgba(0, 0, 0, 0.82) 100%); }
+/* warm variant for cream photos: deep brown instead of grey-black */
+.shadeWarm { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(43, 28, 16, 0.3) 0%, transparent 24%, transparent 42%, rgba(43, 28, 16, 0.62) 70%, rgba(33, 21, 12, 0.9) 100%); }
 .body { position: absolute; inset: auto 0 0; padding: 24px 22px calc(env(safe-area-inset-bottom, 0px) + 86px); }
 .mid { top: 0; display: flex; flex-direction: column; justify-content: center; padding-top: 90px; }
 .panel { position: absolute; inset: 0; overflow: hidden; display: flex; flex-direction: column; padding: calc(env(safe-area-inset-top, 0px) + 84px) 20px calc(env(safe-area-inset-bottom, 0px) + 18px); }

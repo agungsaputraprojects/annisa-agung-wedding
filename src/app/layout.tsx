@@ -3,7 +3,7 @@ import { wedding } from "@/config/wedding";
 import { formatLongDate } from "@/lib/date";
 import "./globals.css";
 
-const couple = `${wedding.groom.nickname} & ${wedding.bride.nickname}`;
+const couple = wedding.coupleName;
 const description = `Undangan pernikahan ${wedding.groom.fullName} & ${wedding.bride.fullName}, ${formatLongDate(wedding.events[0].date)}.`;
 
 export const metadata: Metadata = {

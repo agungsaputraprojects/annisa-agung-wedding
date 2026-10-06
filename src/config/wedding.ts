@@ -11,7 +11,8 @@ export type Person = {
   photo: Photo;
 };
 
-export type Photo = { src: string; alt: string };
+/** `position` = CSS object-position, to keep people in frame when the 9:16 story crops the photo */
+export type Photo = { src: string; alt: string; position?: string };
 
 export type WeddingEvent = {
   name: string;
@@ -40,6 +41,12 @@ export type StoryChapter = {
 
 export type WeddingConfig = {
   hashtag: string;
+  /** how the couple is named everywhere (cover, story header, RSVP message, calendar) */
+  coupleName: string;
+  /** initials in the round avatar at the top of the story */
+  monogram: string;
+  /** first slide after the cover */
+  opening: Photo;
   timezoneOffset: string;
   groom: Person;
   bride: Person;
@@ -58,7 +65,10 @@ export type WeddingConfig = {
 };
 
 export const wedding: WeddingConfig = {
-  hashtag: "#AgungIcha2026",
+  hashtag: "#mengAGUNGkanICHA",
+  coupleName: "Annisa & Agung",
+  monogram: "A&A",
+  opening: { src: "/img/cream-gaze.jpg", alt: "Annisa dan Agung berdiri berdampingan saling menatap" },
   timezoneOffset: "+07:00",
 
   groom: {
@@ -66,14 +76,14 @@ export const wedding: WeddingConfig = {
     fullName: "Agung Saputra",
     role: "Mempelai Pria",
     parents: "Putra dari Bapak Alfanny & Ibu Watmawati",
-    photo: { src: "/img/groom-drape.jpg", alt: "Potret Agung mengenakan tuksedo hitam" },
+    photo: { src: "/img/groom-side.jpg", alt: "Potret Agung berkacamata mengenakan jas hitam", position: "55% 30%" },
   },
   bride: {
-    nickname: "Icha",
+    nickname: "Annisa",
     fullName: "Annisa Aprilia Nilam Sari",
     role: "Mempelai Wanita",
     parents: "Putri dari Bapak Syahril Guci & Ibu Nining Lesmana",
-    photo: { src: "/img/bride-drape.jpg", alt: "Potret Icha mengenakan gaun tulle hitam" },
+    photo: { src: "/img/bride-bouquet.jpg", alt: "Potret Annisa memegang buket lili putih", position: "88% 35%" },
   },
 
   events: [
@@ -159,7 +169,7 @@ export const wedding: WeddingConfig = {
     { src: "/img/cream-kick.jpg", caption: "Langkah", alt: "Agung dan Icha berpose ceria mengangkat kaki" },
     { src: "/img/couple-bouquet.jpg", caption: "Lili putih", alt: "Icha memegang buket lili putih di samping Agung" },
     { src: "/img/cream-seated.jpg", caption: "Duduk", alt: "Agung dan Icha duduk berdampingan" },
-    { src: "/img/bride-bouquet.jpg", caption: "Icha", alt: "Icha tersenyum memegang buket bunga" },
+    { src: "/img/bride-bouquet.jpg", caption: "Annisa", alt: "Annisa tersenyum memegang buket bunga" },
     { src: "/img/groom-side.jpg", caption: "Agung", alt: "Agung berdiri menyamping dan menoleh ke kamera" },
     { src: "/img/cream-chair.jpg", caption: "Bersama", alt: "Agung duduk di kursi, Icha berdiri di belakangnya" },
     { src: "/img/back2back-closed.jpg", caption: "Hening", alt: "Agung dan Icha memejamkan mata, saling membelakangi" },

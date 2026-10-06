@@ -16,10 +16,10 @@ const A = ({ i = 0, as: Tag = "div", className = "", style, children, ...rest }:
   <Tag className={`${s.a} ${className}`} style={{ "--a": i, ...style } as CSSProperties} {...rest}>{children}</Tag>
 );
 
-const Photo = ({ src, alt, priority }: { src: string; alt: string; priority?: boolean }) => (
+const Photo = ({ src, alt, priority, position = "50% 50%", warm }: { src: string; alt: string; priority?: boolean; position?: string; warm?: boolean }) => (
   <>
-    <Image className={`${s.photo} ${s.kb}`} src={src} alt={alt} fill sizes="(min-width:640px) 460px, 100vw" priority={priority} style={{ objectFit: "cover" }} />
-    <div className={s.shade} />
+    <Image className={`${s.photo} ${s.kb}`} src={src} alt={alt} fill sizes="(min-width:640px) 460px, 100vw" priority={priority} style={{ objectFit: "cover", objectPosition: position }} />
+    <div className={warm ? s.shadeWarm : s.shade} />
   </>
 );
 
@@ -30,7 +30,7 @@ const Photo = ({ src, alt, priority }: { src: string; alt: string; priority?: bo
  */
 export function StoriesInvitation({ guest }: { guest?: string }) {
   const ev0 = W.events[0];
-  const couple = `${W.groom.nickname} & ${W.bride.nickname}`;
+  const couple = W.coupleName;
   const [weekday, dayMonth] = [
     new Intl.DateTimeFormat("id-ID", { weekday: "long", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date)),
     new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date)),
@@ -39,13 +39,13 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
 
   const slides: Slide[] = [
     {
-      key: "opening", bg: "/img/couple-arm.jpg", duration: 7000,
+      key: "opening", bg: W.opening.src, duration: 7000,
       content: (
         <>
-          <Photo src="/img/couple-arm.jpg" alt="Agung dan Icha tersenyum berdampingan" priority />
+          <Photo src={W.opening.src} alt={W.opening.alt} position={W.opening.position} warm priority />
           <div className={s.body}>
             <A as="span" className={s.sticker}>Undangan Pernikahan</A>
-            <A as="h2" i={1} className={s.big} style={{ marginTop: 16 }}>{W.groom.nickname}<br /><i>&amp; {W.bride.nickname}</i></A>
+            <A as="h2" i={1} className={s.big} style={{ marginTop: 16 }}>{W.bride.nickname}<br /><i>&amp; {W.groom.nickname}</i></A>
             <A as="p" i={2} className={s.sub}>{formatLongDate(ev0.date)}</A>
             <A as="p" i={3} className={s.hint}>Ketuk kanan untuk lanjut {next}</A>
           </div>
@@ -68,7 +68,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       key: i ? "bride" : "groom", bg: p.photo.src, duration: 7000,
       content: (
         <>
-          <Photo src={p.photo.src} alt={p.photo.alt} />
+          <Photo src={p.photo.src} alt={p.photo.alt} position={p.photo.position} />
           <div className={s.body}>
             <A as="span" className={s.sticker}>{p.role}</A>
             <A as="h2" i={1} className={s.big} style={{ marginTop: 14 }}>{i ? <i>{p.nickname}</i> : p.nickname}</A>
@@ -213,7 +213,7 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       <StoryPlayer
         slides={slides}
         title={couple}
-        monogram={`${W.groom.nickname[0]}&${W.bride.nickname[0]}`}
+        monogram={W.monogram}
         dateShort={new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", timeZone: "Asia/Jakarta" }).format(toDate(ev0.date))}
         rsvpKey="rsvp"
         giftKey="gift"
