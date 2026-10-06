@@ -301,7 +301,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
         </button>
       </div>
       <p className={s.keys}>Ketuk sisi kanan/kiri atau tombol panah · tahan untuk menjeda</p>
-      <audio ref={audioRef} src="/audio/bg-music.mp4" preload="auto" />
+      <audio ref={audioRef} src="/audio/bg-music.mp3" preload="none" />
     </StoryCtx.Provider>
   );
 }
