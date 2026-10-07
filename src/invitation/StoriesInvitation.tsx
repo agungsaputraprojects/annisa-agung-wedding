@@ -188,8 +188,8 @@ export function StoriesInvitation({ guest }: { guest?: string }) {
       content: (
         <>
           <div className={s.duo}>
-            <div><Image src={W.closingPhotos[0].src} alt={W.closingPhotos[0].alt} fill sizes="230px" style={{ objectFit: "cover", objectPosition: W.closingPhotos[0].position }} /></div>
-            <div style={{ background: "#d0c4b4" }}><Image src={W.closingPhotos[1].src} alt={W.closingPhotos[1].alt} fill sizes="230px" style={{ objectFit: "cover", objectPosition: W.closingPhotos[1].position, top: -25 }} /></div>
+            <div><Image src={W.closingPhotos[0].src} alt={W.closingPhotos[0].alt} fill sizes="50vw" style={{ objectFit: "cover", objectPosition: W.closingPhotos[0].position }} /></div>
+            <div style={{ background: "#d0c4b4" }}><Image src={W.closingPhotos[1].src} alt={W.closingPhotos[1].alt} fill sizes="50vw" style={{ objectFit: "cover", objectPosition: W.closingPhotos[1].position, top: -25 }} /></div>
           </div>
           <div className={s.shade} />
           <div className={s.body} style={{ textAlign: "center" }}>
