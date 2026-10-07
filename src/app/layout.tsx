@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `The Wedding of ${couple}`,
     description,
-    images: [{ url: wedding.cover.src, width: 1000, height: 1500, alt: wedding.cover.alt }],
+    images: [{ url: "/img/cream-hands.jpg", width: 1000, height: 1500, alt: "Agung dan Annisa bergandengan tangan" }],
     locale: "id_ID",
     type: "website",
   },
