@@ -56,7 +56,7 @@ export function StoryPlayer({ slides, title, dateShort, monogram, rsvpKey, giftK
   const reduce = useReducedMotion();
   const stage = useRef<HTMLElement>(null);
 
-  const AUDIO_START = 52;
+  const AUDIO_START = 0;
 
   const curRef = useRef(0);
   const go = useCallback((n: number) => {

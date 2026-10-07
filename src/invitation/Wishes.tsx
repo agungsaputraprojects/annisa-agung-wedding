@@ -90,7 +90,7 @@ export function Wishes({ defaultName = "" }: { defaultName?: string }) {
         )}
       </header>
 
-      <div className={s.feed} data-scroll="" data-no-tap="">
+      <div className={s.feed} data-scroll="">
         {status === "loading" && (
           <ul className={s.list} aria-label="Memuat ucapan">
             {[0, 1, 2].map((i) => (
